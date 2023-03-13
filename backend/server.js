@@ -7,11 +7,10 @@ const cors = require('cors')
 
 // use cors and allow all origins to access the server 
 app.use(cors())
-app.use(express.json())
 
 // start the server
 app.listen(4000, () => {
-  console.log("listening on port 4000!")
+  console.log("listening on port 4000")
 })
 
 app.post('/', async (req, res) => {
@@ -20,16 +19,13 @@ app.post('/', async (req, res) => {
     });
 
   const openai = new OpenAIApi(configuration);
-  console.log('body')
-  await console.log(req.headers.message)
     
   const completion = await openai.createChatCompletion({
     model: "gpt-3.5-turbo", 
-    messages: req.headers.message
+    messages: JSON.parse(req.headers.messages)
   });
 
-  await console.log(completion.data.choices)
-  await res.json({role: "assistant", content: completion.data.choices[0].message.content})
+  await res.json(completion.data.choices[0].message)
 })
 
 
