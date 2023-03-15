@@ -9,7 +9,7 @@ export const Chat = () => {
     const [model, setModel] = React.useState('gpt-3.5-turbo');
     
     const handleModelChange = (event) => {
-        setValue(event.target.value);
+      setModel(event.target.value);
     };
 
     useEffect(() => {
@@ -18,7 +18,6 @@ export const Chat = () => {
 
     const handleSubmit =  (e) => {
         e.preventDefault();
-      if (input === !"") {
           
           // Update messages with the user message
           setMessages(prevMessages => [
@@ -27,7 +26,6 @@ export const Chat = () => {
           ])
 
           setInput("");
-        }
       }
 
       const callApi = async () => {
@@ -37,6 +35,10 @@ export const Chat = () => {
             "Content-Type": "application/json",
             "Messages": JSON.stringify(messages)
           },
+          body: JSON.stringify({
+            model: model,
+            messages: messages
+          })
         });
         const data = await response.json();
       

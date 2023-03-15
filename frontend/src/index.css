@@ -40,6 +40,13 @@
   margin-bottom: 1em;
   overflow: scroll;
   height: 580px;
+
+    -ms-overflow-style: none;
+    
+}
+
+.messages-container::-webkit-scrollbar {
+  display: none;
 }
 
 .message {
