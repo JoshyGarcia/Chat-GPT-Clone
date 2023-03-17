@@ -20,17 +20,27 @@ app.listen(4000, () => {
 
 app.post('/', async (req, res) => {
   const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: req.body.userApiKey
     });
 
   const openai = new OpenAIApi(configuration);
+  
+  try{
+    const completion = await openai.createChatCompletion({
+      model: req.body.model, 
+      messages: req.body.messages
+    })
     
-  const completion = await openai.createChatCompletion({
-    model: "gpt-3.5-turbo", 
-    messages: req.body.messages
-  });
+  console.log(req.body.model)
 
   await res.json(completion.data.choices[0].message)
+
+  }
+  catch(err){
+    res.status(400).json({message: "Invalid API Key"})
+    console.log(err)
+  }
+
 })
 
 

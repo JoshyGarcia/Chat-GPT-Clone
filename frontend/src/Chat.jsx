@@ -6,25 +6,29 @@ import { nanoid } from 'nanoid'
 export const Chat = () => {
     const [input , setInput] = useState('')
     const [messages, setMessages] = useState([])
-    const [model, setModel] = React.useState('gpt-3.5-turbo');
+    const [model, setModel] = React.useState('gpt-4-0314');
+    const [userApiKey, setUserApiKey] = useState('' || localStorage.getItem('userApiKey'))
     
     const handleModelChange = (event) => {
       setModel(event.target.value);
     };
 
     useEffect(() => {
-
-    }, [messages]);
+      localStorage.setItem('userApiKey', userApiKey);
+    }, [userApiKey]);
 
     const handleSubmit =  (e) => {
         e.preventDefault();
-          
-          // Update messages with the user message
-          setMessages(prevMessages => [
-            ...prevMessages,
-            { role: "user", content: input }
-          ])
 
+        if ((input === "") || (userApiKey === "")) {
+          return;
+        }
+        
+        // Update messages with the user message
+        setMessages(prevMessages => [
+          ...prevMessages,
+          { role: "user", content: input }
+        ])
           setInput("");
       }
 
@@ -37,7 +41,8 @@ export const Chat = () => {
           },
           body: JSON.stringify({
             model: model,
-            messages: messages
+            messages: messages,
+            userApiKey: userApiKey
           })
         });
         const data = await response.json();
@@ -62,14 +67,15 @@ export const Chat = () => {
   return (
     <div className='container'>
       <aside className='aside'>
+        <p>Api Key</p>
+        <input type="text" value={userApiKey} onChange={(e) => setUserApiKey(e.target.value)} placeholder="Enter your api key"/>
         <Dropdown 
           key={nanoid()}
           label="Model" 
           value={model}
           options={[
-            { value: "gpt-3.5-turbo", label: "chatgpt" },
-            { value: "davinci", label: "davinci" },
-            { value: "babbage", label: "babbage" }
+            { value: "gpt-4-0314", label: "GPT-4" },
+            { value: "gpt-3.5-turbo", label: "Chat-GPT" }
           ]}
           onChange={handleModelChange}
         />
