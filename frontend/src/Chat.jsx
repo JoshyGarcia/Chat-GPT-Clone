@@ -106,7 +106,9 @@ export const Chat = () => {
     const messagesHtml = messages.map((message, index) => (
       <div key={index} style={message.role === "user"? {backgroundColor: '#1a1a1a'} : {backgroundColor: '#242424'}} className='message'>
         <div className='message-body'>
-          <img src={message.role === "user"? "./src/assets/avatar.png" : "./src/assets/apple-touch-icon.png"} alt="user" className='user-image'/>
+          <div className='image-container'>
+            <img src={message.role === "user"? "./src/assets/avatar.png" : "./src/assets/apple-touch-icon.png"} alt="user" className='message-image'/>
+          </div>
           <p className='user-message'>{message.content}</p>
         </div>
       </div>
@@ -115,54 +117,72 @@ export const Chat = () => {
     setMessagesHtml(messagesHtml)
   }, [messages]);
 
+    const toggleMenu = () => {
+      const menu = document.querySelector(".aside");
+      const menu2 = document.querySelector(".aside-wrapper");
+      menu.classList.toggle("aside-active");
+      menu2.classList.toggle("aside-active");
+    };
+
   return (
     <div className='container'>
-      <aside className='aside'>
-      <Dropdown 
-          key={nanoid()}
-          label="Model" 
-          value={model}
-          options={[
-            { value: "gpt-4-0314", label: "GPT-4" },
-            { value: "gpt-3.5-turbo", label: "Chat-GPT" }
-          ]}
-          onChange={handleModelChange}
-        />
+       <button className='hamburger-menu' onClick={toggleMenu}>
+        
+        <span className='hamburger-menu-line'><i className="fa-solid fa-bars"></i></span>
+      </button>
+      <div className='main-content'>
+        <div className='aside-wrapper'>
+          <aside className='aside' >
+            <div className='dropdown'>
+              <Dropdown 
+              key={nanoid()}
+              label="Model" 
+              value={model}
+              options={[
+                { value: "gpt-4-0314", label: "GPT-4" },
+                { value: "gpt-3.5-turbo", label: "Chat-GPT" }
+              ]}
+              onChange={handleModelChange}
+              />
+            </div>
 
-        <p>Api Key</p>
-        <input type="password" value={userApiKey} onChange={(e) => setUserApiKey(e.target.value)} placeholder="Enter your api key"/>
+            <p>Api Key</p>
+            <input type="password" value={userApiKey} onChange={(e) => setUserApiKey(e.target.value)} placeholder="Enter your api key"/>
 
-        <p>Temperature</p>
-        <Range range={temperature} handleChange={changeTemperature} min={0.1} max={1.0} />
+            <div className='temperature'>
+              <p>Temperature</p>
+              <Range state={temperature} handleChange={changeTemperature} min={0.1} max={1.0} />
+            </div>
 
-        <p>Max Tokens</p>
-        <Range range={maxTokens} handleChange={changeMaxTokens} min={0} max={258} />
+            <div className='max-tokens'>
+              <p>Max Tokens</p>
+              <Range state={maxTokens} handleChange={changeMaxTokens} min={0} max={2048} />
+            </div>
 
-      </aside>
-
-      <section className='chat-log'>
-        <h1>CHAT</h1>
-        <div className='messages-container'>
-          {messagesHtml}
+          </aside>
         </div>
+        <section className='chat-log'>
+          <h1>CHAT</h1>
+          <div className='messages-container'>
+            {messagesHtml}
+          </div>
 
-        <form action="" method="post" onSubmit={handleSubmit} className='chat-form'>
-            <input type="text"
-                name="input"
-                placeholder="Type your message here"
-                className='chat-input' 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-            />
-            <input 
-              type="submit" 
-              value="Chat"
-              className='chat-submit'
-            />
-        </form>
-
-      </section>
-      
+          <form action="" method="post" onSubmit={handleSubmit} className='chat-form'>
+              <input type="text"
+                  name="input"
+                  placeholder="Type your message here"
+                  className='chat-input' 
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+              />
+              <input 
+                type="submit" 
+                value="Chat"
+                className='chat-submit'
+              />
+          </form>
+        </section>
+      </div>
     </div>
   )
 }

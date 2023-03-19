@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 export const Range = (props) => {
-  const { min, max, state, onChange } = props;
+  const { min, max, state, handleChange } = props;
   return (
     <div>
       <input
@@ -10,7 +10,7 @@ export const Range = (props) => {
         max={max}
         step="0.01"
         value={state}
-        onChange={onChange}
+        onChange={handleChange}
       />
       <span>{state}</span>
     </div>
