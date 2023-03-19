@@ -2,14 +2,26 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { Dropdown } from './Dropdown'
 import { nanoid } from 'nanoid'
+import { Range } from './Range'
 
 export const Chat = () => {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
+  const [temperature, setTemperature] = useState(0.7)
+  const [maxTokens, setMaxTokens] = useState(50);
+
   const [clientId, setClientId] = useState('')
   const [model, setModel] = React.useState('gpt-4-0314')
   const [userApiKey, setUserApiKey] = useState('' || localStorage.getItem('userApiKey'))
   const [messagesHtml, setMessagesHtml] = useState([])
+
+  const changeTemperature = (event) => {
+    setTemperature(parseFloat(event.target.value));
+  };
+
+  const changeMaxTokens = (event) => {
+    setMaxTokens(parseInt(event.target.value));
+  };
 
   const handleModelChange = (event) => {
     setModel(event.target.value)
@@ -103,16 +115,10 @@ export const Chat = () => {
     setMessagesHtml(messagesHtml)
   }, [messages]);
 
-
-
-
-
   return (
     <div className='container'>
       <aside className='aside'>
-        <p>Api Key</p>
-        <input type="password" value={userApiKey} onChange={(e) => setUserApiKey(e.target.value)} placeholder="Enter your api key"/>
-        <Dropdown 
+      <Dropdown 
           key={nanoid()}
           label="Model" 
           value={model}
@@ -122,6 +128,16 @@ export const Chat = () => {
           ]}
           onChange={handleModelChange}
         />
+
+        <p>Api Key</p>
+        <input type="password" value={userApiKey} onChange={(e) => setUserApiKey(e.target.value)} placeholder="Enter your api key"/>
+
+        <p>Temperature</p>
+        <Range range={temperature} handleChange={changeTemperature} min={0.1} max={1.0} />
+
+        <p>Max Tokens</p>
+        <Range range={maxTokens} handleChange={changeMaxTokens} min={0} max={258} />
+
       </aside>
 
       <section className='chat-log'>
