@@ -14,6 +14,8 @@ export const Chat = () => {
   const [model, setModel] = React.useState('gpt-4-0314')
   const [userApiKey, setUserApiKey] = useState('' || localStorage.getItem('userApiKey'))
   const [messagesHtml, setMessagesHtml] = useState([])
+  const messagesContainerRef = React.useRef(null);
+
 
   const changeTemperature = (event) => {
     setTemperature(parseFloat(event.target.value));
@@ -54,7 +56,12 @@ export const Chat = () => {
     }
   }, [messages]);
 
-
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+  
   useEffect(() => {
     const newClientId = nanoid(); // Generate a unique clientId using nanoId
     setClientId(newClientId);
@@ -66,17 +73,17 @@ export const Chat = () => {
       console.log(data)
   
       setMessages((prevMessages) => {
-          let lastMessage = prevMessages[prevMessages.length - 1];
-          let newMessages = prevMessages.slice(0, prevMessages.length - 1);
-  
-          if (lastMessage.role === 'assistant') {
-            lastMessage.content += data;
-            newMessages.push(lastMessage);
-          } 
-          else {
-            return [...prevMessages, { role: 'assistant', content: data }];
-          }
-          return newMessages;
+        let lastMessage = prevMessages[prevMessages.length - 1];
+        let newMessages = prevMessages.slice(0, prevMessages.length - 1);
+      
+        if (lastMessage.role === 'assistant') {
+          let updatedMessage = { ...lastMessage, content: lastMessage.content + data };
+          newMessages.push(updatedMessage);
+        } 
+        else {
+          return [...prevMessages, { role: 'assistant', content: data }];
+        }
+        return newMessages;
       });
     };
   
@@ -163,7 +170,7 @@ export const Chat = () => {
         </div>
         <section className='chat-log'>
           <h1>CHAT</h1>
-          <div className='messages-container'>
+          <div className='messages-container' ref={messagesContainerRef}>
             {messagesHtml}
           </div>
 
