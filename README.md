@@ -8,8 +8,6 @@ Welcome to the Chat-GPT Clone project, a web application that mimics the functio
 2. [Technologies Used](#technologies-used)
 3. [How to Use](#how-to-use)
 4. [APIs](#apis)
-5. [Contributing](#contributing)
-6. [License](#license)
 
 ## Features
 
