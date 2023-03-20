@@ -64,6 +64,9 @@ app.post('/', async (req, res) => {
       messages: req.body.messages,
       stream: true,
     })
+  }).catch((error) => {
+    console.error(error)
+    return res.status(500).json({ error: 'Something went wrong' })
   })
 
   if (!response.ok) {
