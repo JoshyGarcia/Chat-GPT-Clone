@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const fetch = require('node-fetch');
 
 // use cors and allow all origins to access the server
 app.use(cors());
