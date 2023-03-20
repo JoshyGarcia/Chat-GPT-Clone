@@ -66,7 +66,7 @@ export const Chat = () => {
     const newClientId = nanoid(); // Generate a unique clientId using nanoId
     setClientId(newClientId);
   
-    const eventSource = new EventSource(`http://127.0.0.1:4000/events/${newClientId}`);
+    const eventSource = new EventSource(`https://chat-gpt-clone-y5ns.onrender.com/events/${newClientId}`);
   
     eventSource.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -93,7 +93,7 @@ export const Chat = () => {
   }, []);
 
   const callApi = async () => {
-    await fetch('http://127.0.0.1:4000', {
+    await fetch('https://chat-gpt-clone-y5ns.onrender.com', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

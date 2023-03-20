@@ -22,6 +22,7 @@ const clients = new Map();
 
 // Handle the SSE endpoint
 app.get('/events/:clientId', (req, res) => {
+  try {
   console.log('Client connected', req.params.clientId);
   const clientId = req.params.clientId;
 
@@ -35,6 +36,9 @@ app.get('/events/:clientId', (req, res) => {
   req.on('close', () => {
     clients.delete(clientId);
   });
+  } catch (error) {
+    console.error(error)
+  }
 });
 
 const sendToClient = (clientId, message) => {
@@ -46,6 +50,8 @@ const sendToClient = (clientId, message) => {
 };
 
 app.post('/', async (req, res) => {
+  try {
+
   console.log('Request body', req.body);
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -94,5 +100,9 @@ app.post('/', async (req, res) => {
       }
     }
   }
-    
+} 
+  catch (error) {
+  console.error(error)
+  return res.status(500).json({ error: 'Something went wrong' })
+  }
 });
