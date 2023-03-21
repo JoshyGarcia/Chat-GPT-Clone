@@ -7,8 +7,8 @@ import { Range } from './Range'
 export const Chat = () => {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
-  const [temperature, setTemperature] = useState(0.7)
-  const [maxTokens, setMaxTokens] = useState(50);
+  const [temperature, setTemperature] = useState(0.7 || localStorage.getItem('temperature'))
+  const [maxTokens, setMaxTokens] = useState(50 || localStorage.getItem('maxTokens'));
 
   const [clientId, setClientId] = useState('')
   const [model, setModel] = React.useState('gpt-4-0314')
@@ -28,6 +28,14 @@ export const Chat = () => {
   const handleModelChange = (event) => {
     setModel(event.target.value)
   }
+
+  useEffect(() => {
+    localStorage.setItem('temperature', temperature)
+  }, [temperature])
+
+  useEffect(() => {
+    localStorage.setItem('maxTokens', maxTokens)
+  }, [maxTokens])
 
   useEffect(() => {
     localStorage.setItem('userApiKey', userApiKey)
@@ -104,6 +112,8 @@ export const Chat = () => {
         messages: messages,
         userApiKey: userApiKey,
         clientId: clientId,
+        temperature: temperature,
+        maxTokens: maxTokens,
       }),
     })
   }
@@ -114,7 +124,7 @@ export const Chat = () => {
       <div key={index} style={message.role === "user"? {backgroundColor: '#1a1a1a'} : {backgroundColor: '#242424'}} className='message'>
         <div className='message-body'>
           <div className='image-container'>
-            <img src={message.role === "user"? "./src/assets/avatar.png" : "./src/assets/apple-touch-icon.png"} alt="user" className='message-image'/>
+            <img src={message.role === "user"? "/avatar.png" : "/apple-touch-icon.png"} alt="user" className='message-image'/>
           </div>
           <p className='user-message'>{message.content}</p>
         </div>

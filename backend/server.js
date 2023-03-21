@@ -50,8 +50,8 @@ const sendToClient = (clientId, message) => {
 };
 
 app.post('/', async (req, res) => {
-  try {
 
+  try {
   console.log('Request body', req.body);
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -62,6 +62,8 @@ app.post('/', async (req, res) => {
     body: JSON.stringify({
       model: req.body.model,
       messages: req.body.messages,
+      max_tokens: req.body.maxTokens,
+      temperature: req.body.temperature,
       stream: true,
     })
   }).catch((error) => {
@@ -103,8 +105,7 @@ app.post('/', async (req, res) => {
       }
     }
   }
-} 
-  catch (error) {
+} catch (error) {
   console.error(error)
   return res.status(500).json({ error: 'Something went wrong' })
   }
