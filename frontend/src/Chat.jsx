@@ -7,8 +7,8 @@ import { Range } from './Range'
 export const Chat = () => {
   const [input, setInput] = useState('')
   const [messages, setMessages] = useState([])
-  const [temperature, setTemperature] = useState(0.7 || localStorage.getItem('temperature'))
-  const [maxTokens, setMaxTokens] = useState(50 || localStorage.getItem('maxTokens'));
+  const [temperature, setTemperature] = useState(0.7 || localStorage.getItem('temperature') || 0.7)
+  const [maxTokens, setMaxTokens] = useState(localStorage.getItem('maxTokens') || 50);
 
   const [clientId, setClientId] = useState('')
   const [model, setModel] = React.useState('gpt-4-0314')
