@@ -20,6 +20,7 @@ Welcome to the Chat-GPT Clone project, a web application that mimics the functio
 - HTML
 - CSS
 - JavaScript
+- Node.js
 - React
 - OpenAI API
 
